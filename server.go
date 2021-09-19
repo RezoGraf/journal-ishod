@@ -3,10 +3,9 @@ package main
 import (
 	"database/sql"
 	"log"
-	"net/http"
 	"os"
 
-	"github.com/gin-gonic/gin"
+	"github.com/go-martini/martini"
 	_ "github.com/mattn/go-sqlite3"
 )
 
@@ -115,27 +114,9 @@ func main() {
 
 	//--------------------gin-gonic---------------------------
 
-	r := gin.Default()
-	r.GET("/status", func(c *gin.Context) {
-		c.String(200, "on")
+	m := martini.Classic()
+	m.Get("/", func() string {
+		return "Hello world!"
 	})
-
-	r.GET("/user/:name", func(c *gin.Context) {
-		name := c.Param("name")
-		c.String(http.StatusOK, "Hello %s", name)
-	})
-
-	r.GET("/user/:name/:action", func(c *gin.Context) {
-		name := c.Param("name")
-		action := c.Param("action")
-		message := name + " is " + action
-		c.String(http.StatusOK, message)
-	})
-
-	r.POST("/foo", func(c *gin.Context) {
-		var login LOGIN
-		c.BindJSON(&login)
-		c.JSON(200, gin.H{"status": login.USER}) // Your custom response here
-	})
-	r.Run(":8080") // listen for incoming connections
+	m.Run()
 }

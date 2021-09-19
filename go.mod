@@ -6,6 +6,7 @@ require github.com/gin-gonic/gin v1.7.4
 
 require (
 	github.com/gin-contrib/sse v0.1.0 // indirect
+	github.com/go-martini/martini v0.0.0-20170121215854-22fa46961aab
 	github.com/go-playground/locales v0.13.0 // indirect
 	github.com/go-playground/universal-translator v0.17.0 // indirect
 	github.com/go-playground/validator/v10 v10.4.1 // indirect
@@ -21,3 +22,5 @@ require (
 	golang.org/x/sys v0.0.0-20200116001909-b77594299b42 // indirect
 	gopkg.in/yaml.v2 v2.2.8 // indirect
 )
+
+require github.com/codegangsta/inject v0.0.0-20150114235600-33e0aa1cb7c0 // indirect
