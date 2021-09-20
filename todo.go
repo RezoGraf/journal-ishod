@@ -2,8 +2,7 @@ package main
 
 import (
 	"database/sql"
-	"log"
-	"os"
+	"journal-ishod-1/handlers"
 
 	"github.com/labstack/echo/v4"
 	_ "github.com/mattn/go-sqlite3"
@@ -33,11 +32,10 @@ func initDB(filepath string) *sql.DB {
 
 func migrate(db *sql.DB) {
 	sql := `
-	create table IF NOT EXISTS foo (
+	CREATE TABLE IF NOT EXISTS tasks(
 		id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-		id INTEGER not null PRIMARY KEY,
-		name text VARCHAR NOT NULL);
-	delete from foo;
+		name VARCHAR NOT NULL
+	);
     `
 
 	_, err := db.Exec(sql)
@@ -51,29 +49,23 @@ func main() {
 
 	//-------------SQLITE--------------------------
 
-	os.Remove("./foo.db")
+	// os.Remove("./foo.db")
 
-	db, err := sql.Open("sqlite3", "./foo.db")
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer db.Close()
+	db := initDB("./foo.db")
 
-	sqlStmt := `
-
-	`
-	_, err = db.Exec(sqlStmt)
-	if err != nil {
-		log.Printf("%q: %s\n", err, sqlStmt)
-		return
-	}
+	// _, err = db.Exec(sqlStmt)
+	// if err != nil {
+	// 	log.Printf("%q: %s\n", err, sqlStmt)
+	// 	return
+	// }
 
 	// Create a new instance of Echo
 	e := echo.New()
 
-	e.GET("/tasks", func(c echo.Context) error { return c.JSON(200, "GET Tasks") })
-	e.PUT("/tasks", func(c echo.Context) error { return c.JSON(200, "PUT Tasks") })
-	e.DELETE("/tasks/:id", func(c echo.Context) error { return c.JSON(200, "DELETE Task "+c.Param("id")) })
+	e.File("/", "public/index.html")
+	e.GET("/tasks", handlers.GetTasks(db))
+	e.PUT("/tasks", handlers.PutTask(db))
+	e.DELETE("/tasks/:id", handlers.DeleteTask(db))
 
 	// Start as a web server
 	e.Logger.Fatal(e.Start(":8080"))

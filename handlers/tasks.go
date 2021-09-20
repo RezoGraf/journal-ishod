@@ -2,11 +2,9 @@ package handlers
 
 import (
 	"database/sql"
-	"journal-ishod/models"
+	"journal-ishod-1/models"
 	"net/http"
 	"strconv"
-
-	// "go-echo-vue/models"
 
 	"github.com/labstack/echo"
 )
